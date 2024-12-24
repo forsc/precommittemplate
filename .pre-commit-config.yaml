@@ -3,13 +3,18 @@ repos:
     rev: v4.5.0
     hooks:
     -   id: trailing-whitespace
+        exclude: \.(md|txt)$
     -   id: end-of-file-fixer
+        exclude: \.(md|txt)$
     -   id: check-yaml
     -   id: check-added-large-files
         args: ['--maxkb=2048']
     -   id: check-merge-conflict
+        exclude: \.(md|txt)$
     -   id: check-case-conflict
+        exclude: \.(md|txt)$
     -   id: mixed-line-ending
+        exclude: \.(md|txt)$
     -   id: detect-private-key
 
 -   repo: https://github.com/psf/black
@@ -17,11 +22,15 @@ repos:
     hooks:
     -   id: black
         language_version: python3
+        exclude: \.(md|txt)$
+        args: ['--line-length=128', '--indent-size=4', '--multi-line=3']
 
 -   repo: https://github.com/PyCQA/flake8
     rev: 6.1.0
     hooks:
     -   id: flake8
+        exclude: \.(md|txt)$
+        args: ['--max-line-length=128', '--indent-size=4', '--max-complexity=3']
         additional_dependencies: [
             'flake8-docstrings',
             'flake8-bugbear',
@@ -32,7 +41,8 @@ repos:
     rev: 5.12.0
     hooks:
     -   id: isort
-        args: ["--profile", "black"]
+        exclude: \.(md|txt)$
+        args: ["--profile", "black", "--indent=4", "--multi-line=3"]
 
 -   repo: https://github.com/hadolint/hadolint
     rev: v2.12.0
@@ -44,19 +54,30 @@ repos:
     rev: v3.0.1
     hooks:
     -   id: pylint
+        exclude: \.(md|txt)$
         args: [
             "--disable=C0111",  # missing-docstring
             "--disable=C0103",  # invalid-name
+            "--max-branches=3"
         ]
 
 -   repo: https://github.com/Lucas-C/pre-commit-hooks-safety
     rev: v1.3.2
     hooks:
-    -   id: python-safety-dependencies-check 
+    -   id: python-safety-dependencies-check
+        exclude: \.(md|txt)$
 
--   repo: https://github.com/pre-commit/pre-rebase-hook
-    rev: v0.1.0
+-   repo: https://github.com/kynan/nbstripout
+    rev: 0.6.1
     hooks:
-    -   id: pre-rebase
-        name: Auto Rebase
-        stages: [rebase] 
+    -   id: nbstripout
+        name: Clear Notebook Outputs
+
+-   repo: https://github.com/mattlqx/pre-commit-search-and-replace
+    rev: v1.0.5
+    hooks:
+    -   id: file-contents-sorter
+        name: Auto Rebase Check
+        types: [text]
+        args: [--ignore-case]
+        stages: [rebase]
